@@ -1,0 +1,201 @@
+clc
+clear
+
+
+%initilize
+spriteSize = 16;
+zoom = 5;
+BGR = [0, 128, 43];
+Z = 1;
+
+
+%upload retro pack png and set sprite size, zoom, and BGR of background
+cardScene = simpleGameEngine('retro_cards.png', spriteSize, spriteSize, zoom, BGR);
+card_sprites = 21:72;
+
+
+% Placing bets
+betamount = input('How much money do you want to bet?:')
+
+
+% give each card a value
+deckValue = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10 ...
+ , 11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11, 2, 3, ...
+ 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11, 2, 3, 4, 5, 6, 7, 8, ...
+ 9, 10, 10, 10, 10];
+while Z == 1
+  scene = initial_scene();
+  drawScene(cardScene, scene)
+  title('Press Space to Play')
+  A = getKeyboardInput(cardScene);
+
+
+  % Shuffle the deck and use the first 5 in the hand
+  ShuffledDeck = randperm(52); % Random permutation of numbers 1 to 52
+  usercard1 = card_sprites(ShuffledDeck(1));
+  usercard2 = card_sprites(ShuffledDeck(2));
+  dealercard1 = card_sprites(ShuffledDeck(3));
+
+
+  %Calculate the total value of the cards
+  userValue = (deckValue(usercard1 - 20) + deckValue(usercard2 - 20));
+  dealerValue = deckValue(dealercard1 - 20);
+  if(isequal(A, 'space'))
+      scene = [1, 4, dealercard1, 1, 1, 1, 1;
+      1, 1, 1, 1, 1, 1, 1;
+      1, usercard1, usercard2, 1, 1, 1, 1;];
+      drawScene(cardScene, scene)
+      title('Press ''h'' to hit or ''s'' to stand')
+  end
+ 
+  % if the player gets 21 points off of the deal
+  if userValue == 21
+      drawScene(cardScene, scene)
+      title('BlackJack! You Win!')
+  end
+  B = getKeyboardInput(cardScene);
+  while userValue < 22
+  if isequal(B, 'h') && userValue < 22
+      usercard3 = card_sprites(ShuffledDeck(4));
+      scene = [1, 4, dealercard1, 1, 1, 1, 1;
+      1, 1, 1, 1, 1, 1, 1;
+      1, usercard1, usercard2, usercard3, 1, 1, 1;];
+      drawScene(cardScene, scene)
+      userValue = (deckValue(usercard1 - 20) + deckValue(usercard2 - 20) + deckValue(usercard3 - 20));
+  elseif isequal(B, 's') && userValue < 22
+      scene = [1, 4, dealercard1, 1, 1, 1, 1;
+      1, 1, 1, 1, 1, 1, 1;
+      1, usercard1, usercard2, 1, 1, 1, 1;];
+      drawScene(cardScene, scene)
+      break
+  end
+  if userValue > 21
+      break
+  end
+  if isequal(B, 'h')
+      C = getKeyboardInput(cardScene);
+  end
+  if isequal(C, 'h') && userValue < 22
+      usercard4 = card_sprites(ShuffledDeck(5));
+      scene = [1, 4, dealercard1, 1, 1, 1, 1;
+      1, 1, 1, 1, 1, 1, 1;
+      1, usercard1, usercard2, usercard3, usercard4, 1, 1;];
+      drawScene(cardScene, scene)
+      userValue = (deckValue(usercard1 - 20) + deckValue(usercard2 - 20) + deckValue(usercard3 - 20) + deckValue(usercard4 - 20));
+  elseif isequal(C, 's') && userValue < 22
+      scene = [1, 4, dealercard1, 1, 1, 1, 1;
+      1, 1, 1, 1, 1, 1, 1;
+      1, usercard1, usercard2, usercard3, 1, 1, 1;];
+      drawScene(cardScene, scene)
+      break
+  end
+  if userValue > 21
+      break
+  end
+  if isequal(B, 'h') && isequal(C, 'h')
+      D = getKeyboardInput(cardScene);
+  end
+  if isequal(D, 'h') && userValue < 22
+      usercard5 = card_sprites(ShuffledDeck(6));
+      scene = [1, 4, dealercard1, 1, 1, 1, 1;
+      1, 1, 1, 1, 1, 1, 1;
+      1, usercard1, usercard2, usercard3, usercard4, usercard5, 1;];
+      drawScene(cardScene, scene)
+      userValue = (deckValue(usercard1 - 20) + deckValue(usercard2 - 20) + deckValue(usercard3 - 20) + deckValue(usercard4 - 20) + deckValue(usercard5 - 20));
+  elseif isequal(D, 's') && userValue < 22
+      scene = [1, 4, dealercard1, 1, 1, 1, 1;
+      1, 1, 1, 1, 1, 1, 1;
+      1, usercard1, usercard2, usercard3, usercard4, 1, 1;];
+      drawScene(cardScene, scene)
+      break
+  end
+  if userValue > 21
+      break
+  end
+  if isequal(B, 'h') && isequal(C, 'h') && isequal(D, 'h')
+      E = getKeyboardInput(cardScene);
+  end
+  if isequal(E, 'h') && userValue < 22
+      usercard6 = card_sprites(ShuffledDeck(7));
+      scene = [1, 4, dealercard1, 1, 1, 1, 1;
+      1, 1, 1, 1, 1, 1, 1;
+      1, usercard1, usercard2, usercard3, usercard4, usercard5, usercard6;];
+      drawScene(cardScene, scene)
+      userValue = (deckValue(usercard1 - 20) + deckValue(usercard2 - 20) + deckValue(usercard3 - 20) + deckValue(usercard4 - 20) + deckValue(usercard5 - 20) + deckValue(usercard6 - 20));
+  elseif isequal(E, 's') && userValue < 22
+      scene = [1, 4, dealercard1, 1, 1, 1, 1;
+      1, 1, 1, 1, 1, 1, 1;
+      1, usercard1, usercard2, usercard3, usercard4, usercard5, 1;];
+      drawScene(cardScene, scene)
+      break
+  end
+  if userValue > 21
+      break
+  end
+  end
+  drawScene(cardScene, scene)
+  title('Press Space to continue')
+  F = getKeyboardInput(cardScene);
+  if dealerValue < 17 && isequal(F, 'space')
+      dealercard2 = card_sprites(ShuffledDeck(8));
+      scene(1, 4) = dealercard2;
+      drawScene(cardScene, scene)
+      dealerValue = deckValue(dealercard1 - 20) + deckValue(dealercard2 - 20);
+  end
+  drawScene(cardScene, scene)
+  title('Press Space to continue')
+  G = getKeyboardInput(cardScene);
+  if dealerValue < 17 && isequal(G, 'space')
+      dealercard3 = card_sprites(ShuffledDeck(9));
+      scene(1, 5) = dealercard3;
+      drawScene(cardScene, scene)
+      dealerValue = deckValue(dealercard1 - 20) + deckValue(dealercard2 - 20) + deckValue(dealercard3 - 20);
+  end
+  drawScene(cardScene, scene)
+  title('Press Space to continue')
+  H = getKeyboardInput(cardScene);
+  if dealerValue < 17 && isequal(H, 'space')
+      dealercard4 = card_sprites(ShuffledDeck(10));
+      scene(1, 6) = dealercard4;
+      drawScene(cardScene, scene)
+      dealerValue = deckValue(dealercard1 - 20) + deckValue(dealercard2 - 20) + deckValue(dealercard3 - 20) + deckValue(dealercard4 - 20);
+  end
+  if userValue > 21 && dealerValue > 21
+      drawScene(cardScene, scene)
+      title('You Both Lose! Press ''r'' to replay!')
+      moneylost = betamount
+  elseif userValue == dealerValue
+      drawScene(cardScene, scene)
+      title('You Tied! Press ''r'' to replay!')
+      moneywon = 0
+  elseif dealerValue > 21
+      drawScene(cardScene, scene)
+      title('You Win! Press ''r'' to replay!')
+      moneywon = betamount * 2
+  elseif userValue > 21
+      drawScene(cardScene, scene)
+      title('You Lose! Press ''r'' to replay!')
+      moneylost = betamount
+  elseif dealerValue > userValue
+      drawScene(cardScene, scene)
+      title('You Lose! Press ''r'' to replay!')
+      moneylost = betamount
+  elseif userValue > dealerValue
+      drawScene(cardScene, scene)
+      title('You Win! Press ''r'' to replay!')
+      moneywon = betamount * 2
+  end
+   X = getKeyboardInput(cardScene);
+  if isequal(X, 'r')
+      Z = 1;
+  else
+      Z = 2;
+  end
+end
+fprintf('%.0f userValue, %.0f dealerValue \n', userValue, dealerValue)
+function scene = intial_scene()
+    scene = [1, 4, 1, 1, 1, 1, 1;
+        1, 1, 1, 1, 1, 1, 1;
+        1, 1, 1, 1, 1, 1, 1;];
+end
+
